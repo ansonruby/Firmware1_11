@@ -16,7 +16,7 @@ N_A_Ordenada_Crip	='/home/pi/Firmware/db/Data/Tabla_Ordenada_Crip.txt'
 #-------        Status     ----------
 # Led
 N_A_Estados_Led	        ='/home/pi/Firmware/db/Status/Estado_Led.txt'
-N_A__Led	        ='/home/pi/Firmware/db/Status/Led.txt'
+N_A__Led	            ='/home/pi/Firmware/db/Status/Led.txt'
 # Teclado
 N_A_Estados_Teclado     ='/home/pi/Firmware/db/Status/Estado_Teclado.txt'
 N_A_Teclas_Led	        ='/home/pi/Firmware/db/Status/Teclas.txt'

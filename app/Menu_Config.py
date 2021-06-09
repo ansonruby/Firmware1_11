@@ -19,20 +19,17 @@ from pro.mod.M_Inf_Dispositivo import *  # importar con los mismos nombres
 """
 N_A_wifi                ='/etc/wpa_supplicant/wpa_supplicant.conf'
 N_A_IP_Static           ='/etc/dhcpcd.conf'
-
 """
-
 
 #-----------------------------------
 #---------Variables de configuracion
 #-----------------------------------
 
-
 tk = Tk()
 tk.geometry("320x480")
 tk.geometry("+%d+%d" % (0,0))
 #tk.config(background='Dark gray')
-#tk.attributes("-fullscreen",True)
+tk.attributes("-fullscreen",True)
 
 
 Fuente=("Arial",14,'bold')
@@ -245,8 +242,6 @@ def Modificar_Archivo(a):
 
         if a==0:	arch	=	N_A_wifi
         if a==1:	arch	=	N_A_IP_Static
-
-
 
         f = open (arch,'r')
         lineas = f.readlines()
@@ -854,6 +849,7 @@ def verificar_IP_Static(): #esta función verifica que este correcto usuario y c
                         Modificar_Archivo1(1,1)
                 else:
                         Modificar_Archivo1(1,0)
+
                 commands.getoutput('sudo reboot')
 
 
@@ -910,8 +906,7 @@ def verificar_wifi(): #esta función verifica que este correcto usuario y contra
             Nueva_wifi='\nnetwork={\n\tssid="'+red+'"\n\tpsk="'+clave+'"\n\tkey_mgmt=WPA-PSK\n\n}'
             print (Nueva_wifi)
 
-            Escrivir_Archivo(Nueva_wifi,6)
-
+            Escrivir_Archivo(Nueva_wifi,43)
             commands.getoutput('sudo reboot')
 
 def ver_menu_principal():

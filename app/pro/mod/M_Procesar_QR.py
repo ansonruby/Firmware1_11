@@ -27,6 +27,67 @@ import threading
 #----      Funciones para el manejo del buzzer     ----
 #-----------------------------------------------------------
 
+def Proceso_Led_Estado_4():
+    Tiempo_Torniquete =int(Leer_Archivo(30))
+    Escrivir_Archivos(10,'4') #para la pantalla
+    Escrivir_Archivos(3,'4') #para leD
+    time.sleep(Tiempo_Torniquete)
+    Escrivir_Archivos(3,'0')
+    Escrivir_Archivos(10,'0') #para la pantalla
+
+def Proceso_Led_Estado_3():
+    Tiempo_Torniquete =int(Leer_Archivo(30))
+    Escrivir_Archivos(10,'3') #para la pantalla
+    Escrivir_Archivos(3,'3')
+    time.sleep(Tiempo_Torniquete)
+    Escrivir_Archivos(3,'0')
+    Escrivir_Archivos(10,'0') #para la pantalla
+
+def Proceso_Led_Estado_6():
+    Tiempo_Torniquete =int(Leer_Archivo(30))
+    Escrivir_Archivos(10,'6') #para la pantalla
+    Escrivir_Archivos(3,'6')
+    time.sleep(Tiempo_Torniquete)
+    Escrivir_Archivos(3,'0')
+    Escrivir_Archivos(10,'0') #para la pantalla
+
+
+def Direcion_Led(Res):
+
+    global H_E3_LED
+    global H_E4_LED
+    global H_E6_LED
+
+    Direc = Leer_Archivo(13)  # Direccion_Torniquete
+    if Res == 'Access granted-E':
+        if Direc == 'D':
+            #Escrivir_Archivos(3,'4')
+            if H_E4_LED.isAlive() is False:
+                H_E4_LED   = threading.Thread(target=Proceso_Led_Estado_4)
+                H_E4_LED.start()
+        else :
+            #Escrivir_Archivos(3,'3')
+            if H_E3_LED.isAlive() is False:
+                H_E3_LED   = threading.Thread(target=Proceso_Led_Estado_3)
+                H_E3_LED.start()
+    elif Res == 'Access granted-S':
+        if Direc == 'D':
+            #Escrivir_Archivos(3,'3')
+            if H_E3_LED.isAlive() is False:
+                H_E3_LED   = threading.Thread(target=Proceso_Led_Estado_3)
+                H_E3_LED.start()
+        else :
+            #Escrivir_Archivos(3,'4')
+            if H_E4_LED.isAlive() is False:
+                H_E4_LED   = threading.Thread(target=Proceso_Led_Estado_4)
+                H_E4_LED.start()
+    else :
+        #Escrivir_Archivos(3,'6')
+        if H_E6_LED.isAlive() is False:
+            H_E6_LED   = threading.Thread(target=Proceso_Led_Estado_6)
+            H_E6_LED.start()
+
+
 
 def Decision_Torniquete (Res, QR, ID2, Ti,Qr_Te, I_N_S ):
 
@@ -36,8 +97,10 @@ def Decision_Torniquete (Res, QR, ID2, Ti,Qr_Te, I_N_S ):
     Co = QR+'.'             #QR
     Res=Res.rstrip('\n')    #limpiar respuesta
     Res=Res.rstrip('\r')
-    #Direccion LED falta diseñar
-    Direcion_Rele(Res)      #Activacion de relevos "Proceso bloqueante" Hilo?
+
+    Direcion_Led(Res)       #procesos en hilo LED
+    Direcion_Rele(Res)      #Activacion de relevos en  Hilo?
+
 
     #guardar deciones de Entrada y Salida
     if Res == 'Access granted-E':
@@ -148,6 +211,10 @@ def Procesar_QR():
 H_D_QR   = threading.Thread(target=P_Dispositivo_QR)#, args=(0,))
 H_S_QR  = threading.Thread(target=P_Servidor_QR)#,  args=(0,))
 
+
+H_E4_LED   = threading.Thread(target=Proceso_Led_Estado_4)#, args=(0,))
+H_E3_LED  = threading.Thread(target=Proceso_Led_Estado_3)#,  args=(0,))
+H_E6_LED  = threading.Thread(target=Proceso_Led_Estado_6)#,  args=(0,))
 
 #-----------------------------------------------------------
 #               Pruebas de funcioanmiento

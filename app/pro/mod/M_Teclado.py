@@ -369,9 +369,9 @@ def clrbut(): #para el boton c borrar
     #print Contador_Menu
     if Contador_Menu == 5:  # numero de veces para activar El Menu de Configuracion
         Contador_Menu = 0
-        #pygame.quit()
-        #commands.getoutput('python /home/pi/Firmware/app/Menu_Config.py')
-        #sys.exit()
+        pygame.quit()
+        commands.getoutput('python /home/pi/Firmware/app/Menu_Config.py')
+        sys.exit()
 
 def equlbut():  #para el boton OK  #hacer un hilo para procesar los ruts
      global operator

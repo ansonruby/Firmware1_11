@@ -8,6 +8,10 @@ from lib.Configuracion import *  # importar con los mismos nombres
 #from M_Inf_Dispositivo import *  # importar con los mismos nombres
 #import time
 #import RPi.GPIO as GPIO #Libreria Python GPIO
+
+
+import threading
+
 #-----------------------------------------------------------
 #                       CONTANTES
 #-----------------------------------------------------------
@@ -68,17 +72,43 @@ def Cerrado():
     else:                          Cerrado_Pin()         #Para cerrar pines
 #-----------------------------------------------------------
 def Direcion_Rele(Res):
+    global H_S_RELE
+    global H_E_RELE
     Direc = Leer_Archivo(13)  # Direccion_Torniquete
     if Res == 'Access granted-E':
-        if Direc == 'D': Salir()
-        else :           Entrar()
+        if Direc == 'D':
+            #Salir()
+            if H_S_RELE.isAlive() is False:
+                H_S_RELE   = threading.Thread(target=Salir)
+                H_S_RELE.start()
+        else :
+            #Entrar()
+            if H_E_RELE.isAlive() is False:
+                H_E_RELE   = threading.Thread(target=Entrar)
+                H_E_RELE.start()
+
     elif Res == 'Access granted-S':
-        if Direc == 'D': Entrar()
-        else :           Salir()
+        if Direc == 'D':
+            #Entrar()
+            if H_E_RELE.isAlive() is False:
+                H_E_RELE   = threading.Thread(target=Entrar)
+                H_E_RELE.start()
+
+        else :
+            #Salir()
+            if H_S_RELE.isAlive() is False:
+                H_S_RELE   = threading.Thread(target=Salir)
+                H_S_RELE.start()
 
 #-----------------------------------------------------------
 #                   Configuracion local
 #-----------------------------------------------------------
+
+
+
+
+H_S_RELE   = threading.Thread(target=Salir)
+H_E_RELE   = threading.Thread(target=Entrar)
 
 #-----------------------------------------------------------
 #               Pruebas de funcioanmiento
