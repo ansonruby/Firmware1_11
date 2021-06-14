@@ -1,6 +1,6 @@
 
 
-from pro.P_Teclado import *  # importar con los mismos nombres
+from pro.mod.M_Teclado import *  # importar con los mismos nombres
 
 print 'Listo'
 Ciclo_Teclado()

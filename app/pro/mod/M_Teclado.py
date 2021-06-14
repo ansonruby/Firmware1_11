@@ -3,8 +3,9 @@
 #----      importar complementos                    ----
 #-------------------------------------------------------
 
-from lib.L_Archivos         import *  # importar con los mismos nombres
-from lib.L_Pygame           import *  # importar con los mismos nombres
+from lib.Lib_File           import *  # importar con los mismos nombres
+from lib.Lib_Pygame         import *  # importar con los mismos nombres
+from lib.Lib_Networks       import *  # importar con los mismos nombres
 from M_Inf_Dispositivo      import *  # importar con los mismos nombres
 
 #-----------------------------------------------------------
@@ -50,13 +51,63 @@ MAX_Constador_Red   = 80
 Estado_Usuario = 0
 Estado_visual_Usuario = 0
 
-
+#--- Para Evento del QR repetido
+Estado_QR = 0
+Estado_visual_QR = 0
+Contador_QR_Repetido=0
+MAX_Contador_QR_Repetido=20
 
 
 
 #-----------------------------------------------------------
 #----      Funciones para el manejo del Teclado         ----
 #-----------------------------------------------------------
+
+
+
+
+
+# *****-----------------------------------------------------------
+# ***** Evento de QR Estado_QR_Repetido
+def Evento_Estado_QR_Repetido():
+    global Estado_QR
+    global Estado_visual_QR
+    global Contador_QR_Repetido
+    global MAX_Contador_QR_Repetido
+
+
+    QR = Get_File(STATUS_REPEAT_QR)
+    #print QR
+
+    if '2' ==  QR : # or '3' ==  Usuario or '4' ==  Usuario:
+        Estado_QR = QR
+        Estado_visual_QR = 1
+        Contador_QR_Repetido = Contador_QR_Repetido +1
+        if Contador_QR_Repetido >= MAX_Contador_QR_Repetido:
+            Contador_QR_Repetido=0
+            Set_File(STATUS_REPEAT_QR, '0')
+            Estado_visual_QR = 0
+
+        return 1
+    else:
+        Estado_visual_QR = 0
+        return -1
+
+
+def Pintar_QR_Repetido():
+    Pintar_Alerta()
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -88,7 +139,7 @@ def Evento_Estado_Usuario():
     global Estado_visual_Usuario
 
 
-    Usuario = Leer_Estado(10)
+    Usuario = Get_File(STATUS_USER)
 
     if '6' ==  Usuario or '3' ==  Usuario or '4' ==  Usuario:
         Estado_Usuario = Usuario
@@ -194,7 +245,7 @@ def Evento_Forzar_Firmware():
         #print 'Esatdo Info:' +str(Contador_Informacion)
         # Avilitar visualizacion
         if Contador_Inf_Forzar_Firmware == 1:
-            Escrivir_Archivos(40, '1') #  cambiar estado para hacer la actualizacion de firmware
+            Set_File(COM_FIRMWARE, '1')   # cambiar estado para hacer la actualizacion de firmware
             Estado_visual_Forzar_Firmware =1
             return 1
         # Desavilitar visualizacion
@@ -316,8 +367,7 @@ def click_Tecla(number): # teclas de 0-9 y k
     global Estado_Informacion
     global Estado_Forzar_Firmware
 
-    Escrivir_Archivos(6, '1')   # activar sonido por 500*2
-
+    Set_File(COM_BUZZER, '1')      # activar sonido por 500*1
     if Contador_Menu == 3: # Numero de borrados
         if   number == 11: Estado_Forzar_Firmware  = 1 # Tecla 'K' print 'Forzar Actualizacion Firmware'
         elif number == 1 : Estado_Informacion      = 1 # Tecla '1' print 'ver informacion dispositivo'
@@ -350,8 +400,7 @@ def clrbut(): #para el boton c borrar
     global Texto_Display
     global Memoria
 
-    Escrivir_Archivos(6, '1')   # activar sonido por 500*2
-
+    Set_File(COM_BUZZER, '1')      # activar sonido por 500*1
     trama = len(operator)
     if trama > 0:
         operator=operator[:trama-1]
@@ -374,19 +423,19 @@ def clrbut(): #para el boton c borrar
         sys.exit()
 
 def equlbut():  #para el boton OK  #hacer un hilo para procesar los ruts
-     global operator
-     global Contador_Menu
-     global Texto_Display
-     global Memoria
+    global operator
+    global Contador_Menu
+    global Texto_Display
+    global Memoria
 
-     Escrivir_Archivos(6, '1')   # activar sonido por 500*2
-     Contador_Menu=0
-     if len(operator) > 0:
-          Escrivir_Archivos(5, operator) # escrivir en archivo para procesar
-          operator=""
-          Memoria=""
-          Texto_Display  = operator
-          Escrivir_Archivos(4,'1') # Estado de teckas para enviar a servidor
+    Set_File(COM_BUZZER, '1')           # activar sonido por 500*1
+    Contador_Menu=0
+    if len(operator) > 0:
+        Set_File(COM_TECLADO, operator) # escrivir en archivo para procesar
+        operator=""
+        Memoria=""
+        Texto_Display  = operator
+        Set_File(STATUS_TECLADO, '1')       # Estado de teckas para enviar a servidor
 
 
 def Evento_Teclado():
@@ -455,6 +504,7 @@ def Dibujar():
     if Estados_visualizacion  == 1:         Pintar_mensaje( 38, 70, Inf_Dispositivo())
     if Estado_visual_Forzar_Firmware  == 1: Pintar_mensaje( 38, 70, "      Forzando\n Actualizacion\n     Firmware\n")
     if Estado_visual_Red  == 1:             Pintar_Status_Red(GET_STatus_Red())
+    if Estado_visual_QR  == 1:              Pintar_QR_Repetido()
     if Estado_visual_Usuario   == 1:        Pintar_Estados_Usuario(Leer_Estado(10))
 
 
@@ -473,19 +523,21 @@ def Eventos():
     EFF = -1
     EER = -1
     EEU = -1
+    EEQ = -1
     #------------------------------------------------
     EID = Evento_Informacion_Dispositivo()
     EFF = Evento_Forzar_Firmware()
     ET  = Evento_Teclado()
     EER = Evento_Estado_Red()
     EEU = Evento_Estado_Usuario()
+    EEQ = Evento_Estado_QR_Repetido()
     #------------------------------------------------
 
     #print 'ET: ' + str(ET)
     #print 'EID: ' + str(EID)
 
     #------------------------------------------------
-    if EID != -1 or ET != -1  or EFF != -1  or EER != -1  or EEU != -1 : return 1         # repintar
+    if EID != -1 or ET != -1  or EFF != -1  or EER != -1  or EEU != -1 or EEQ != -1: return 1         # repintar
     else                     : return -1        # No pintar
     return -1
 

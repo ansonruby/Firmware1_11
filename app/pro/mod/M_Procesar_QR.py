@@ -2,12 +2,14 @@
 #-------------------------------------------------------
 #----      importar complementos                    ----
 #-------------------------------------------------------
-from lib.L_Tiempo import *  # importar con los mismos nombres
-from lib.L_Requests import *  # importar con los mismos nombres
+import threading
+
+from lib.Lib_Time import *  # importar con los mismos nombres
+from lib.Lib_Requests import *  # importar con los mismos nombres
 from M_Inf_Dispositivo import *  # importar con los mismos nombres
 from M_Rele import *  # importar con los mismos nombres
 
-import threading
+
 #-----------------------------------------------------------
 #                       CONTANTES
 #-----------------------------------------------------------
@@ -28,28 +30,28 @@ import threading
 #-----------------------------------------------------------
 
 def Proceso_Led_Estado_4():
-    Tiempo_Torniquete =int(Leer_Archivo(30))
-    Escrivir_Archivos(10,'4') #para la pantalla
-    Escrivir_Archivos(3,'4') #para leD
+    Tiempo_Torniquete =int(Get_File(CONF_TIEM_RELE))
+    Set_File(STATUS_USER,'4') #para la pantalla
+    Set_File(COM_LED,'4') #para leD
     time.sleep(Tiempo_Torniquete)
-    Escrivir_Archivos(3,'0')
-    Escrivir_Archivos(10,'0') #para la pantalla
+    Set_File(COM_LED,'0')
+    Set_File(STATUS_USER,'0') #para la pantalla
 
 def Proceso_Led_Estado_3():
-    Tiempo_Torniquete =int(Leer_Archivo(30))
-    Escrivir_Archivos(10,'3') #para la pantalla
-    Escrivir_Archivos(3,'3')
+    Tiempo_Torniquete =int(Get_File(CONF_TIEM_RELE))
+    Set_File(STATUS_USER,'3') #para la pantalla
+    Set_File(COM_LED,'3')
     time.sleep(Tiempo_Torniquete)
-    Escrivir_Archivos(3,'0')
-    Escrivir_Archivos(10,'0') #para la pantalla
+    Set_File(COM_LED,'0')
+    Set_File(STATUS_USER,'0') #para la pantalla
 
 def Proceso_Led_Estado_6():
-    Tiempo_Torniquete =int(Leer_Archivo(30))
-    Escrivir_Archivos(10,'6') #para la pantalla
-    Escrivir_Archivos(3,'6')
+    Tiempo_Torniquete =int(Get_File(CONF_TIEM_RELE))
+    Set_File(STATUS_USER,'6') #para la pantalla
+    Set_File(COM_LED,'6')
     time.sleep(Tiempo_Torniquete)
-    Escrivir_Archivos(3,'0')
-    Escrivir_Archivos(10,'0') #para la pantalla
+    Set_File(COM_LED,'0')
+    Set_File(STATUS_USER,'0') #para la pantalla
 
 
 def Direcion_Led(Res):
@@ -58,7 +60,7 @@ def Direcion_Led(Res):
     global H_E4_LED
     global H_E6_LED
 
-    Direc = Leer_Archivo(13)  # Direccion_Torniquete
+    Direc = Get_File(CONF_DIREC_RELE)  # Direccion_Torniquete
     if Res == 'Access granted-E':
         if Direc == 'D':
             #Escrivir_Archivos(3,'4')
@@ -119,7 +121,7 @@ def Decision_Torniquete (Res, QR, ID2, Ti,Qr_Te, I_N_S ):
 
 #-----------------------------------------------------------
 def Get_QR():
-    Pal=Leer_Archivo(7)
+    Pal=Get_File(COM_QR)
     Pal=Pal.rstrip('\n')
     Pal=Pal.rstrip('\r')
     return Pal
@@ -135,7 +137,7 @@ def P_Servidor_QR():            # Hilo principal
     #print QR
     Respuesta = Enviar_QR(URL_Servidor, T_A, ID_Disp, QR)
     print 'RS: ' + Respuesta #+ ', T: ' + str(int(T2)-int(T_A))
-    Escrivir_Archivos(48,'1')
+    Set_File(48,'1')
     #return Respuesta
     print 'Decision_Torniquete'
     Decision_Torniquete (Respuesta, QRT, "", T_A, '1','0')  #Respuesta_Con_Internet
@@ -144,8 +146,8 @@ def P_Servidor_QR():            # Hilo principal
 #-----------------------------------------------------------
 def P_Dispositivo_QR():
 
-    Escrivir_Archivos(48,'0')
-    Escrivir_Archivos(49, '1')
+    Set_File(48,'0')
+    Set_File(49, '1')
 
     R_Q = (Get_QR()).split('.')
     QR = R_Q[0]
@@ -154,13 +156,13 @@ def P_Dispositivo_QR():
     Respuesta = 'Denegado'
     N_veri = 0
 
-    if Leer_Archivo(48) != '1':
+    if Get_File(48) != '1':
 
         ID_1 = Verificar_ID(IDQ)
         if ID_1 != -1:
             N_veri = Verificar_acceso(ID_1)
 
-        if Leer_Archivo(48) != '1':
+        if Get_File(48) != '1':
 
             if N_veri != 0:
                 if N_veri % 2 == 0	:	N_veri = 1 # Entrar
@@ -171,19 +173,19 @@ def P_Dispositivo_QR():
             if ID_1 != -1 and  N_veri == 2:					Respuesta =  'Access granted-S'#print 'Salida'
 
             print 'RD: ' + Respuesta
-            Escrivir_Archivos(50,Respuesta)
-            Escrivir_Archivos(49, '2')
+            Set_File(50,Respuesta)
+            Set_File(49, '2')
 
         else:
             #print 'Terminar Hilo'
             print 'RD: ' + Respuesta
-            Escrivir_Archivos(50,Respuesta)
-            Escrivir_Archivos(49, '3')
+            Set_File(50,Respuesta)
+            Set_File(49, '3')
     else:
         #print 'Terminar Hilo'
         print 'RD: ' + Respuesta
-        Escrivir_Archivos(50,Respuesta)
-        Escrivir_Archivos(49, '3')
+        Set_File(50,Respuesta)
+        Set_File(49, '3')
 
 #-----------------------------------------------------------
 def Activar_Hilos_Procesar_QR():
@@ -199,10 +201,10 @@ def Activar_Hilos_Procesar_QR():
 
 #-----------------------------------------------------------
 def Procesar_QR():
-    if Leer_Archivo(8) == '1':   # Hay un QR sin procesar
+    if Get_File(STATUS_QR) == '1':   # Hay un QR sin procesar
         print '------ QR ---- '
         Activar_Hilos_Procesar_QR()
-        Borrar_Archivo(8)               #final del procesos
+        Clear_File(STATUS_QR)               #final del procesos
 
 
 #-----------------------------------------------------------
@@ -220,8 +222,7 @@ H_E6_LED  = threading.Thread(target=Proceso_Led_Estado_6)#,  args=(0,))
 #               Pruebas de funcioanmiento
 #-----------------------------------------------------------
 
-#print Leer_Archivo(29)
-#sonido(Tiempo_sonido)
+
 #while (True):
 #    time.sleep(0.05)
 #    Control_Sonidos_Por_Archivo()

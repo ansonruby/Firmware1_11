@@ -2,8 +2,10 @@
 #-------------------------------------------------------
 #----      importar complementos                    ----
 #-------------------------------------------------------
-from lib.L_Tiempo import *  # importar con los mismos nombres
-from lib.L_Requests import *  # importar con los mismos nombres
+#import time
+from lib.Lib_Time import *  # importar con los mismos nombres
+from lib.Lib_File import *  # importar con los mismos nombres
+from lib.Lib_Requests import *  # importar con los mismos nombres
 from M_Inf_Dispositivo import *  # importar con los mismos nombres
 
 
@@ -12,12 +14,6 @@ import threading
 #                       CONTANTES
 #-----------------------------------------------------------
 E_H_Get_Users_serv = 0 #estada para que se actualise por hora
-#ID_Dispositivo  = GET_ID()
-#ID_Dispositivo  = 'CCCB23102020b827eb529826000002'
-#URL_Servidor     = 'https://plataforma.ifchile.com'
-#IP_Servidor     = 'http://45plataforma.ifchile.com' #error de direccion
-
-
 
 #-----------------------------------------------------------
 #                       DEFINICIONES
@@ -55,14 +51,13 @@ def Get_Usuarios_Server():#peticion de usuarios al servidor y guardado en un arc
     if Us_acti.find("Error") == -1:
         s = Us_acti
         s= Filtro_Caracteres (s)
-        Escrivir_Archivos(0,s)
-        Escrivir_Archivos(54,'OK') #Status finalizacion hilo
-        print 'Get user OK'
+        Set_File(TAB_USER,s)                      #guardar usuarios
+        Set_File(HILO_OUT_PETI_USERS,'OK')      #Status finalizacion hilo
+        #print 'Get user OK'
         return 1
 
-    #Escrivir_Archivos(54,'Error') #Status finalizacion hilo
-    Escrivir_Archivos(54,Us_acti) #Status finalizacion hilo
-    print 'Get user Error'
+    Set_File(HILO_OUT_PETI_USERS,Us_acti)       #Status finalizacion hilo
+    #print 'Get user Error'
     return -1
 
 def Activar_Hilos_Get_User():
@@ -81,7 +76,7 @@ def Evento_por_hora_Usuarios_Server():
 
         if E_H_Get_Users_serv == 0:
             E_H_Get_Users_serv = 1
-            print 'Get_User por hora'
+            #print 'Get_User por hora'
             #Get_Usuarios_Server()
             Activar_Hilos_Get_User()
     else:
@@ -90,11 +85,10 @@ def Evento_por_hora_Usuarios_Server():
 #-----------------------------------------------------------
 def Evento_por_Estado_Usuarios_Server():
 
-
-    if Leer_Archivo(53) == '1': #Star de Hilos Usuarios_Server
-            print 'Get_User por sistema'
+    if Get_File(HILO_STATUS_PETI_USERS) == '1': #Star de Hilos Usuarios_Server
+            #print 'Get_User por sistema'
             Activar_Hilos_Get_User()
-            Borrar_Archivo(53)
+            Clear_File(HILO_STATUS_PETI_USERS)
 
 #-----------------------------------------------------------
 def Eventos_Usuarios_Server():#peticion de usuarios al servidor

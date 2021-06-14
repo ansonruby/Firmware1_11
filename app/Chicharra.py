@@ -1,5 +1,5 @@
 
-from pro.P_Buzzer import *
+from pro.mod.M_Buzzer import *
 
 
 # ------------------------------

@@ -5,6 +5,16 @@ from pro.mod.M_Peticion_Usuarios import *  # importar con los mismos nombres
 import time
 
 
+#revicion de conecion y pericon de Usuarios_Server
+def Status_Redes():
+	Estado_redes = GET_STatus_Red()
+	if Estado_redes.find('C') != -1: 	return 1 #print 'hay red lan'
+	else : 								return 0 #print 'No LAN'
+
+
+if Status_Redes() == 1: Escrivir_Archivos(53, '1') #activar peticion de usuarios
+
+
 
 print 'listos'
 while 1:
