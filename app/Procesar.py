@@ -4,9 +4,9 @@
 #-------------------------------------------------------
 import time
 
-from pro.mod.M_Peticion_Usuarios import *  # importar con los mismos nombres
-from pro.mod.lib.Lib_Networks import *  # importar con los mismos nombres
-#from pro.mod.M_Procesar_QR import *  # importar con los mismos nombres
+from pro.mod.M_Peticion_Usuarios import *  	# importar con los mismos nombres
+from pro.mod.lib.Lib_Networks import *  	# importar con los mismos nombres
+#from pro.mod.M_Procesar_QR import *  		# importar con los mismos nombres
 
 #------------------------------------------------------------------------------
 #----           EJECUTAR AL INICIO DEL DISPOSITIVO

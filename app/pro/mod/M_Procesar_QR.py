@@ -95,14 +95,12 @@ def Decision_Torniquete (Res, QR, ID2, Ti,Qr_Te, I_N_S ):
 
     #global Estados
     #Direc_Torniquete = Leer_Archivo(13)  # Direccion_Torniquete
-
     Co = QR+'.'             #QR
     Res=Res.rstrip('\n')    #limpiar respuesta
     Res=Res.rstrip('\r')
 
     Direcion_Led(Res)       #procesos en hilo LED
     Direcion_Rele(Res)      #Activacion de relevos en  Hilo?
-
 
     #guardar deciones de Entrada y Salida
     if Res == 'Access granted-E':
@@ -113,11 +111,8 @@ def Decision_Torniquete (Res, QR, ID2, Ti,Qr_Te, I_N_S ):
         Add_Linea_fin(1,Co+Ti+'.'+Qr_Te+'.1.'+I_N_S+'\n')
     else :
         print "Sin Acceso o rut equivocado estado 5 0 6"
-
     #Escrivir(Co+Ti+'.'+Qr_Te+'.0.'+I_N_S)               #guardar un registro
     #Escrivir_Archivo(Co+Ti+'.'+Qr_Te+'.0.'+I_N_S, 22)   #Para dispotivos asociados
-
-
 
 #-----------------------------------------------------------
 def Get_QR():
@@ -141,7 +136,6 @@ def P_Servidor_QR():            # Hilo principal
     #return Respuesta
     print 'Decision_Torniquete'
     Decision_Torniquete (Respuesta, QRT, "", T_A, '1','0')  #Respuesta_Con_Internet
-
 
 #-----------------------------------------------------------
 def P_Dispositivo_QR():
@@ -204,15 +198,13 @@ def Procesar_QR():
     if Get_File(STATUS_QR) == '1':   # Hay un QR sin procesar
         print '------ QR ---- '
         Activar_Hilos_Procesar_QR()
-        Clear_File(STATUS_QR)               #final del procesos
-
+        Clear_File(STATUS_QR)        #final del procesos
 
 #-----------------------------------------------------------
 #                   Configuracion local
 #-----------------------------------------------------------
 H_D_QR   = threading.Thread(target=P_Dispositivo_QR)#, args=(0,))
 H_S_QR  = threading.Thread(target=P_Servidor_QR)#,  args=(0,))
-
 
 H_E4_LED   = threading.Thread(target=Proceso_Led_Estado_4)#, args=(0,))
 H_E3_LED  = threading.Thread(target=Proceso_Led_Estado_3)#,  args=(0,))
@@ -221,7 +213,6 @@ H_E6_LED  = threading.Thread(target=Proceso_Led_Estado_6)#,  args=(0,))
 #-----------------------------------------------------------
 #               Pruebas de funcioanmiento
 #-----------------------------------------------------------
-
 
 #while (True):
 #    time.sleep(0.05)
