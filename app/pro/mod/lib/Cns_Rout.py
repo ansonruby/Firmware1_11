@@ -29,9 +29,9 @@ INF_VERCION = FIRM + CONF + 'Vercion_Firmware.txt'
 #           Rutas Base de datos
 #---------------------------------
 
-TAB_USER = FIRM + DATA + 'Tabla_Usuarios.txt'
-TAB_ENVI = FIRM + DATA + 'Tabla_Enviar.txt'
-TAB_AUTO = FIRM + COMMA + 'Tabla_Autorizados.txt'
+TAB_USER = FIRM + DATA + 'Tabla_Usuarios.txt'       # Usuarios del servidor o counter
+TAB_ENVI = FIRM + DATA + 'Tabla_Enviar.txt'         # ? posible filtro para mejorar aun no utilizadosd
+TAB_AUTO = FIRM + DATA + 'Tabla_Autorizados.txt'    # Registro de usuarios autorizados entrada y salida
 
 #---------------------------------
 #           Comandos
@@ -68,9 +68,9 @@ CONF_DIREC_RELE = FIRM + CONF + 'Rele/Direccion_Rele.txt'
 HILO_OUT_PETI_USERS = FIRM + HILS + 'M_Peticion_Users/Out_Peticion_Users.txt'
 HILO_STATUS_PETI_USERS = FIRM + HILS + 'M_Peticion_Users/Status_Peticion_Users.txt'
 #-- Procesar QR en el dispositivo
-HILO_N_A_Exit_Dis_QR	        = FIRM + HILS + 'QR/Exit_Dispositivos_QR.txt'   #48
+HILO_N_A_Exit_Dis_QR	    = FIRM + HILS + 'QR/Exit_Dispositivos_QR.txt'   #48
 HILO_N_A_Status_Dis_QR	    = FIRM + HILS + 'QR/Status_Dispositivos_QR.txt' #49
-HILO_N_A_Out_Dis_QR          = FIRM + HILS + 'QR/Out_Dispositivos_QR.txt'    #50
+HILO_N_A_Out_Dis_QR         = FIRM + HILS + 'QR/Out_Dispositivos_QR.txt'    #50
 
 
 

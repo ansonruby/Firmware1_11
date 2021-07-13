@@ -110,6 +110,46 @@ def Num_lines(arch):
         return -1
 
 
+
+
+
+
+
+#-------------------------------------------------------
+def Verificar_ID(Pal): #mejorar por que podia pasa cualquiera en menos tiempo con 40.000 usuarios demora 3 a 4 segundos en autorizar
+
+    archivo = open(TAB_USER, 'r')
+    archivo.seek(0)
+    for linea in archivo.readlines():
+        s=linea.rstrip('\n')
+        s=s.rstrip('\r')
+        s2 =s.partition(".")
+        #print 'ID: '+ s2[0] + ' RUT: '+s2[2]
+        Rut = s2[0]
+        if 	Rut ==	Pal:
+            archivo.close()
+            return s2[0]
+    archivo.close()
+
+    return -1
+
+#-------------------------------------------------------
+def Verificar_acceso(ID1): #mejorar por que podia pasa cualquiera
+
+	Contador=0
+	archivo = open(TAB_AUTO, 'r')
+	archivo.seek(0)
+	for linea in archivo.readlines():
+		s=linea.rstrip('\n')
+		s2 =s.partition(".")
+		s3 = s2[2].partition(".")
+		#print 'QR: '+ s2[0] + ' ID: '+s3[0]
+		ID2 = s3[0]
+		if 	ID2 ==	ID1:
+			Contador +=1
+	archivo.close()
+	return Contador
+
 #-----------------------------------------------------------
 #               Pruebas de funcioanmiento
 #-----------------------------------------------------------

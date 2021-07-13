@@ -6,14 +6,12 @@ import time
 
 from pro.mod.M_Peticion_Usuarios import *  	# importar con los mismos nombres
 from pro.mod.lib.Lib_Networks import *  	# importar con los mismos nombres
-#from pro.mod.M_Procesar_QR import *  		# importar con los mismos nombres
+from pro.mod.M_Procesar_QR import *  		# importar con los mismos nombres
 
 #------------------------------------------------------------------------------
 #----           EJECUTAR AL INICIO DEL DISPOSITIVO
 #------------------------------------------------------------------------------
 if Status_Redes() == 1: Set_File(HILO_STATUS_PETI_USERS, '1') #activar peticion de usuarios
-
-
 
 #------------------------------------------------------------------------------
    	#---------------------------------------------------------
@@ -35,4 +33,4 @@ while 1:
 	#---------------------------------------------------------
 	# Proceso 4: Procesamiento del QR
 	#---------------------------------------------------------
-	#Procesar_QR()
+	Procesar_QR()

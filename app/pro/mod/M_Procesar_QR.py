@@ -14,16 +14,13 @@ from M_Rele import *  # importar con los mismos nombres
 #                       CONTANTES
 #-----------------------------------------------------------
 
-
 #-----------------------------------------------------------
 #                       DEFINICIONES
 #-----------------------------------------------------------
 
-
 #-----------------------------------------------------------
 #                       VARIABLES
 #-----------------------------------------------------------
-
 
 #-----------------------------------------------------------
 #----      Funciones para el manejo del buzzer     ----
@@ -105,10 +102,10 @@ def Decision_Torniquete (Res, QR, ID2, Ti,Qr_Te, I_N_S ):
     #guardar deciones de Entrada y Salida
     if Res == 'Access granted-E':
         print Co+Ti+'.'+Qr_Te+'.0.'+I_N_S
-        Add_Linea_fin(1, Co+Ti+'.'+Qr_Te+'.0.'+I_N_S+'\n')
+        Add_Line_End(TAB_AUTO, Co+Ti+'.'+Qr_Te+'.0.'+I_N_S+'\n')
     elif Res == 'Access granted-S':
         print Co+Ti+'.'+Qr_Te+'.1.'+I_N_S
-        Add_Linea_fin(1,Co+Ti+'.'+Qr_Te+'.1.'+I_N_S+'\n')
+        Add_Line_End(TAB_AUTO,Co+Ti+'.'+Qr_Te+'.1.'+I_N_S+'\n')
     else :
         print "Sin Acceso o rut equivocado estado 5 0 6"
     #Escrivir(Co+Ti+'.'+Qr_Te+'.0.'+I_N_S)               #guardar un registro
@@ -132,7 +129,7 @@ def P_Servidor_QR():            # Hilo principal
     #print QR
     Respuesta = Enviar_QR(URL_Servidor, T_A, ID_Disp, QR)
     print 'RS: ' + Respuesta #+ ', T: ' + str(int(T2)-int(T_A))
-    Set_File(48,'1')
+    Set_File(HILO_N_A_Exit_Dis_QR,'1')
     #return Respuesta
     print 'Decision_Torniquete'
     Decision_Torniquete (Respuesta, QRT, "", T_A, '1','0')  #Respuesta_Con_Internet
@@ -140,8 +137,8 @@ def P_Servidor_QR():            # Hilo principal
 #-----------------------------------------------------------
 def P_Dispositivo_QR():
 
-    Set_File(48,'0')
-    Set_File(49, '1')
+    Set_File(HILO_N_A_Exit_Dis_QR,'0')
+    Set_File(HILO_N_A_Status_Dis_QR, '1')
 
     R_Q = (Get_QR()).split('.')
     QR = R_Q[0]
@@ -150,13 +147,13 @@ def P_Dispositivo_QR():
     Respuesta = 'Denegado'
     N_veri = 0
 
-    if Get_File(48) != '1':
+    if Get_File(HILO_N_A_Exit_Dis_QR) != '1':
 
         ID_1 = Verificar_ID(IDQ)
         if ID_1 != -1:
-            N_veri = Verificar_acceso(ID_1)
+            N_veri = Verificar_acceso(ID_1) #revizar en donde swe dejan los usuarios
 
-        if Get_File(48) != '1':
+        if Get_File(HILO_N_A_Exit_Dis_QR) != '1':
 
             if N_veri != 0:
                 if N_veri % 2 == 0	:	N_veri = 1 # Entrar
@@ -167,19 +164,19 @@ def P_Dispositivo_QR():
             if ID_1 != -1 and  N_veri == 2:					Respuesta =  'Access granted-S'#print 'Salida'
 
             print 'RD: ' + Respuesta
-            Set_File(50,Respuesta)
-            Set_File(49, '2')
+            Set_File(HILO_N_A_Out_Dis_QR,Respuesta)
+            Set_File(HILO_N_A_Status_Dis_QR, '2')
 
         else:
             #print 'Terminar Hilo'
             print 'RD: ' + Respuesta
-            Set_File(50,Respuesta)
-            Set_File(49, '3')
+            Set_File(HILO_N_A_Out_Dis_QR,Respuesta)
+            Set_File(HILO_N_A_Status_Dis_QR, '3')
     else:
         #print 'Terminar Hilo'
         print 'RD: ' + Respuesta
-        Set_File(50,Respuesta)
-        Set_File(49, '3')
+        Set_File(HILO_N_A_Out_Dis_QR,Respuesta)
+        Set_File(HILO_N_A_Status_Dis_QR, '3')
 
 #-----------------------------------------------------------
 def Activar_Hilos_Procesar_QR():
@@ -216,7 +213,8 @@ H_E6_LED  = threading.Thread(target=Proceso_Led_Estado_6)#,  args=(0,))
 
 #while (True):
 #    time.sleep(0.05)
-#    Control_Sonidos_Por_Archivo()
+#    Procesar_QR()
+
 
 #-----------------------------------------------------------
 #-----------------------------------------------------------

@@ -2,6 +2,8 @@
 #-------------------------------------------------------
 #----      importar complementos                    ----
 #-------------------------------------------------------
+import time
+
 import RPi.GPIO as GPIO #Libreria Python GPIO
 import threading
 

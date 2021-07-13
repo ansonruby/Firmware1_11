@@ -505,7 +505,7 @@ def Dibujar():
     if Estado_visual_Forzar_Firmware  == 1: Pintar_mensaje( 38, 70, "      Forzando\n Actualizacion\n     Firmware\n")
     if Estado_visual_Red  == 1:             Pintar_Status_Red(GET_STatus_Red())
     if Estado_visual_QR  == 1:              Pintar_QR_Repetido()
-    if Estado_visual_Usuario   == 1:        Pintar_Estados_Usuario(Leer_Estado(10))
+    if Estado_visual_Usuario   == 1:        Pintar_Estados_Usuario( Get_File(STATUS_USER))  #Leer_Estado(10))
 
 
 

@@ -19,11 +19,9 @@ E_H_Get_Users_serv = 0 #estada para que se actualise por hora
 #                       DEFINICIONES
 #-----------------------------------------------------------
 
-
 #-----------------------------------------------------------
 #                       VARIABLES
 #-----------------------------------------------------------
-
 
 #-----------------------------------------------------------
 #----      Funciones para el manejo de usuarios   ----
@@ -48,6 +46,7 @@ def Get_Usuarios_Server():#peticion de usuarios al servidor y guardado en un arc
     #T2 = T_Actual()             # Tiempo()
     #print 'Fin'
     #print 'T: ' + str(int(T2)-int(T_A))
+
     if Us_acti.find("Error") == -1:
         s = Us_acti
         s= Filtro_Caracteres (s)
@@ -60,6 +59,7 @@ def Get_Usuarios_Server():#peticion de usuarios al servidor y guardado en un arc
     #print 'Get user Error'
     return -1
 
+#-----------------------------------------------------------
 def Activar_Hilos_Get_User():
     global GET_User_Server
 
@@ -95,8 +95,7 @@ def Eventos_Usuarios_Server():#peticion de usuarios al servidor
     Evento_por_hora_Usuarios_Server()  # solo una hora en espesifico se puede mejorar a un siclo de peticiones
     Evento_por_Estado_Usuarios_Server()
 
-
-
+#-----------------------------------------------------------
 
     #hora especifica #"12:10 AM"
     #peticion del sofwate por algun evento
@@ -105,6 +104,7 @@ def Eventos_Usuarios_Server():#peticion de usuarios al servidor
 #                   Configuracion local
 #-----------------------------------------------------------
 GET_User_Server   = threading.Thread(target=Get_Usuarios_Server)#, args=(0,))
+
 #H_S_QR  = threading.Thread(target=P_Servidor_QR)#,  args=(0,))
 
 

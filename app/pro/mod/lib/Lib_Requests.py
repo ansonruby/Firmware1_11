@@ -10,7 +10,6 @@ import commands
 import requests
 import time
 
-
 #-------------------------------------------------------
 #                                   CONTANTES
 #-------------------------------------------------------
@@ -215,6 +214,16 @@ def Confimacion_Firmware(IP, T_actual, ID, vercion_Actual_Firmware, LOG):
     #CE_datos ='{"version":"2019.12.3.0","update":"0","log":"2.3 herror ...."}' #Formato herror
     return Get_Post_try_catch('POST', CE_url, CE_datos, CE_cabeceras, 2)
 
+#-----------------------------------------------------------
+def Pedir_Usuarios_Dentro(IP, T_actual, ID):
+    if P_Mensajes:
+        print '-------------------------------------'
+        print 'Pedir Usuarios Dentro del establecimiento'
+        print '-------------------------------------'
+    return Enviar_Usuarios(IP, T_actual, ID, '{"in_out":[""]}')
+
+#-----------------------------------------------------------
+
 
 #-----------------------------------------------------------
 #               Pruebas de funcioanmiento
@@ -225,14 +234,16 @@ def Confimacion_Firmware(IP, T_actual, ID, vercion_Actual_Firmware, LOG):
 #Enviar_QR('http://plataforma.ifchile.com',str(int(time.time()*1000.0)),'CCCB23102020b827eb529826000002','dD3Wmu0p3f1lv9JGBTpWZfYXosQmMaBezhCJr9m2gKYjBDSIXU9t4sW55adM8PqnpF9yJjjHLd8bsz1fWdl0qg==.gm7dmny')
 #Pedir_Usuarios_Activos('http://plataforma.ifchile.com',str(int(time.time()*1000.0)),'CCCB23102020b827eb529826000002')
 #Ev=Leer_Archivo(7)
-#Ev = ''
-#Ev = Ev.replace('\n','","')
-#Ev = '{"in_out":["'+Ev+'"]}'
-#Ev = Ev.replace('",""]}','"]}')
-#Ev = Ev.replace(',""','')
-#print Ev
-#print Enviar_Usuarios('http://plataforma.ifchile.com',str(int(time.time()*1000.0)),'CCCB23102020b827eb529826000002','')
-#print Enviar_Usuarios('http://35.164.107.131',str(int(time.time()*1000.0)),'ABDB12022020b827eb2fe290000007',Ev)
+
+
+#print Pedir_Usuarios_Dentro('https://plataforma.ifchile.com',str(int(time.time()*1000.0)),'CCCB23102020b827eb529826000002') # funciona
+
+#Ev = '{"in_out":[""]}'
+#print Enviar_Usuarios('https://plataforma.ifchile.com',str(int(time.time()*1000.0)),'CCCB23102020b827eb529826000002',Ev)
+#print Enviar_Usuarios('http://35.164.107.131',str(int(time.time()*1000.0)),'CCCB23102020b827eb529826000002',Ev)
+
+#18.236.119.39
+
 #Ping ('http://plataforma.ifchile.com')
 #Veri_Firmware('http://plataforma.ifchile.com',str(int(time.time()*1000.0)),'CCCB23102020b827eb529826000002','2019.12.3.0')
 
